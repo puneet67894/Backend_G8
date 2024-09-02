@@ -1,0 +1,117 @@
+
+mongo> use studentDB
+switched to db studentDB
+studentDB> db.createCollection('students')
+{ ok: 1 }
+studentDB> db.students.insertMany([
+...     { age: 20, grade: "A", marks: 85 },
+...     { age: 22, grade: "B", marks: 75 },
+...     { age: 21, grade: "A", marks: 90 }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('66d02d858a5bccd1732710bc'),
+    '1': ObjectId('66d02d858a5bccd1732710bd'),
+    '2': ObjectId('66d02d858a5bccd1732710be')
+  }
+}
+studentDB> db.students.find().pretty()
+[
+  {
+    _id: ObjectId('66d02d858a5bccd1732710bc'),
+    age: 20,
+    grade: 'A',
+    marks: 85
+  },
+  {
+    _id: ObjectId('66d02d858a5bccd1732710bd'),
+    age: 22,
+    grade: 'B',
+    marks: 75
+  },
+  {
+    _id: ObjectId('66d02d858a5bccd1732710be'),
+    age: 21,
+    grade: 'A',
+    marks: 90
+  }
+]
+studentDB> db.students.find({ age: 22, marks: 90 }).pretty()
+
+studentDB> db.students.find({ age: 20, marks: 85 }).pretty()
+[
+  {
+    _id: ObjectId('66d02d858a5bccd1732710bc'),
+    age: 20,
+    grade: 'A',
+    marks: 85
+  }
+]
+
+
+studentDB> db.students.find({ age:{$gte:21}, marks: {$gte:80 }}).pretty()
+[
+  {
+    _id: ObjectId('66d02d858a5bccd1732710be'),
+    age: 21,
+    grade: 'A',
+    marks: 90
+  }
+]
+studentDB> db.students.find({ grade:"A"}).pretty()
+[
+  {
+    _id: ObjectId('66d02d858a5bccd1732710bc'),
+    age: 20,
+    grade: 'A',
+    marks: 85
+  },
+  {
+    _id: ObjectId('66d02d858a5bccd1732710be'),
+    age: 21,
+    grade: 'A',
+    marks: 90
+  }
+]
+studentDB>
+
+studentDB> db.students.find({$and:[ {age:{$gte:21}}, {marks: {$gte:80 }}]}).pretty()
+[
+  {
+    _id: ObjectId('66d02d858a5bccd1732710be'),
+    age: 21,
+    grade: 'A',
+    marks: 90
+  }
+ db.students.updateMany({grade:"B"},{$set:{marks:60}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+studentDB> db.students.find()
+[
+  {
+    _id: ObjectId('66d02d858a5bccd1732710bc'),
+    age: 20,
+    grade: 'A',
+    marks: 85
+  },
+  {
+    _id: ObjectId('66d02d858a5bccd1732710bd'),
+    age: 22,
+    grade: 'B',
+    marks: 60
+  },
+  {
+    _id: ObjectId('66d02d858a5bccd1732710be'),
+    age: 21,
+    grade: 'A',
+    marks: 90
+  }
+]
+studentDB>
+
